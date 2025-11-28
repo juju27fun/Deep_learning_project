@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "diabetic-retinopathy-detection"
+version = "0.1.0"
+description = "Anomaly Detection and Severity Classification of Diabetic Retinopathy using TensorFlow"
+authors = ["Your Name <your.email@example.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.12"
+# Core Data Science
+numpy = "^1.26"
+pandas = "^2.1"
+
+# Image Processing
+opencv-python = "^4.8"
+Pillow = "^10.0"
+
+# Deep Learning (TensorFlow Stack)
+# TensorFlow 2.x includes Keras. 
+# Note: On macOS with M1/M2 chips, you may need 'tensorflow-macos' instead.
+tensorflow = "^2.15" 
+
+# Metrics & Visualization
+scikit-learn = "^1.3" # For QWK, Confusion Matrix
+matplotlib = "^3.8"
+seaborn = "^0.13"
+
+# Interpretability (Specific to TensorFlow)
+tf-explain = "^0.3"  # Provides Grad-CAM for Keras models
+# Alternatively: tf-keras-vis
+
+# Interactive Development
+jupyterlab = "^4.0"
+tqdm = "^4.66"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.9"
+flake8 = "^6.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
