@@ -22,7 +22,14 @@ The following libraries are mandated for the transfer learning workflow.
 | | `seaborn` | `^0.13` | Heatmap visualization |
 | **XAI** | `tf-keras-vis` | `^0.8` | Interpretability/Saliency Maps/GradCAM |
 
-## 4. Configuration Constants
+## 4. Model Choice
+
+EfficientNet-B3
+- transfer learning
+- QWK metric
+
+
+## 5. Configuration Constants
 Global constants to be used across all notebooks and scripts to maintain consistency.
 
 ```python
