@@ -1,0 +1,29 @@
+# Data
+data
+sample_submission.csv
+test.csv
+train.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environments
+.env
+.venv
+env/
+venv/
+
+# IDE & System
+.vscode/
+.idea/
+.DS_Store
+
+# Distribution
+build/
+dist/
+*.egg-info/
