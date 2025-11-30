@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import tensorflow as tf
 from sklearn.metrics import cohen_kappa_score, confusion_matrix, classification_report
 
 def calculate_qwk(y_true, y_pred):
@@ -50,3 +51,26 @@ def get_classification_report(y_true, y_pred, classes):
         str: The classification report.
     """
     return classification_report(y_true, y_pred, target_names=classes)
+
+class QWKCallback(tf.keras.callbacks.Callback):
+    """
+    Custom Keras callback to calculate QWK on validation set at the end of each epoch.
+    """
+    def __init__(self, validation_data):
+        super(QWKCallback, self).__init__()
+        self.validation_data = validation_data
+        self.history = []
+
+    def on_epoch_end(self, epoch, logs=None):
+        y_true = []
+        y_pred = []
+        
+        # Iterate over the validation dataset
+        for images, labels in self.validation_data:
+            preds = self.model.predict(images, verbose=0)
+            y_true.extend(labels.numpy())
+            y_pred.extend(np.argmax(preds, axis=1))
+            
+        score = calculate_qwk(y_true, y_pred)
+        self.history.append(score)
+        print(f" - val_qwk: {score:.4f}")
