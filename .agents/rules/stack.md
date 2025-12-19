@@ -41,7 +41,7 @@ NUM_CLASSES = 5            # 0=No DR, 1=Mild, 2=Moderate, 3=Severe, 4=Proliferat
 BATCH_SIZE = 32            # Adjustable based on GPU VRAM
 
 # Reproducibility
-SEED = 42
+SEED = 1
 
 # Training
 SPLIT_RATIO = [0.7, 0.1, 0.2] # Train / Val / Test

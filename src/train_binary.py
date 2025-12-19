@@ -278,6 +278,8 @@ def main():
         class_weight=class_weights_dict
     )
 
+    # ================= FROZEN BACKBONE TRAINING STOPS HERE =================
+    
     # 4. Phase 2 Training (Fine-tuning)
     print(f"Starting Phase 2 Training ({EPOCHS_PHASE_2} epochs)...")
     model.trainable = True
