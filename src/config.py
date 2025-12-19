@@ -1,5 +1,5 @@
 
-IMG_SIZE = (300, 300)
+IMG_SIZE = (224, 224)
 NUM_CLASSES = 5
 BATCH_SIZE = 16  # Reduced batch size to accommodate larger images
 SEED = 42

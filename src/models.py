@@ -3,7 +3,7 @@ from tensorflow.keras.applications import EfficientNetB3
 from tensorflow.keras import layers, models
 from src.config import IMG_SIZE, NUM_CLASSES
 
-def build_model(learning_rate=1e-3, freeze_backbone=True):
+def build_model(learning_rate=1e-3, freeze_backbone=True, num_classes=NUM_CLASSES):
     """
     Builds the EfficientNetB3 model with a custom classification head.
     
@@ -28,14 +28,14 @@ def build_model(learning_rate=1e-3, freeze_backbone=True):
     x = layers.GlobalAveragePooling2D()(backbone.output)
     x = layers.Dense(256, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(1e-4))(x)
     x = layers.Dropout(0.5)(x)
-    outputs = layers.Dense(NUM_CLASSES, activation='softmax', kernel_regularizer=tf.keras.regularizers.l2(1e-4))(x)
+    outputs = layers.Dense(num_classes, activation='softmax', kernel_regularizer=tf.keras.regularizers.l2(1e-4))(x)
     
     model = models.Model(inputs=inputs, outputs=outputs)
     
     # Compile model
     optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
-    loss = tf.keras.losses.SparseCategoricalCrossentropy()
-    metrics = ['accuracy']
+    loss = tf.keras.losses.CategoricalCrossentropy()
+    metrics = ['accuracy', tf.keras.metrics.Precision(name='precision'), tf.keras.metrics.Recall(name='recall')]
     
     model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
     
