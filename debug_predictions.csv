@@ -1,0 +1,3 @@
+id_code,diagnosis,probability,mean_predicted_entropy
+0005cfc8afb6,1,0.47588974,1.1181015
+003f0afdcd15,2,0.41087377,1.2153718

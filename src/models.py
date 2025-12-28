@@ -28,7 +28,7 @@ def build_model(learning_rate=1e-3, freeze_backbone=True, num_classes=NUM_CLASSE
     # Custom classification head
     x = layers.GlobalAveragePooling2D()(backbone.output)
     x = layers.Dense(256, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(1e-4))(x)
-    x = layers.Dropout(0.5)(x)
+    x = layers.Dropout(0.3)(x)
     outputs = layers.Dense(num_classes, activation='softmax', kernel_regularizer=tf.keras.regularizers.l2(1e-4))(x)
     
     model = models.Model(inputs=inputs, outputs=outputs)

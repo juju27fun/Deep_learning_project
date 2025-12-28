@@ -1,4 +1,5 @@
 import numpy as np
+import cv2
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from tf_keras_vis.gradcam import Gradcam
@@ -39,22 +40,61 @@ def visualize_gradcam(model, image, class_index, layer_name=None, save_path=None
     heatmap = heatmap[0]
     
     # Plotting
-    plt.figure(figsize=(10, 5))
+    # Prepare image for display
+    display_image = image.copy()
+    if display_image.dtype != np.uint8 and np.max(display_image) > 1.0:
+        display_image = display_image / 255.0
+        
+    plt.figure(figsize=(14, 5))
     
-    plt.subplot(1, 3, 1)
+    plt.subplot(1, 4, 1)
     plt.title('Original Image')
-    plt.imshow(image)
+    plt.imshow(display_image)
     plt.axis('off')
     
-    plt.subplot(1, 3, 2)
+    plt.subplot(1, 4, 2)
     plt.title('Grad-CAM Heatmap')
     plt.imshow(heatmap, cmap='jet', alpha=0.8)
     plt.axis('off')
     
-    plt.subplot(1, 3, 3)
-    plt.title('Overlay')
-    plt.imshow(image)
-    plt.imshow(heatmap, cmap='jet', alpha=0.5)
+    plt.subplot(1, 4, 3)
+    plt.title('Overlay (Red Part Only)')
+    plt.imshow(display_image)
+    
+    # Create RGBA heatmap for overlay
+    # Resize heatmap to match image size first
+    heatmap_resized = cv2.resize(heatmap, (image.shape[1], image.shape[0]))
+    
+    # Normalize for colormap mapping
+    heatmap_norm_full = (heatmap_resized - np.min(heatmap_resized)) / (np.max(heatmap_resized) - np.min(heatmap_resized) + 1e-8)
+    
+    # Get colormap
+    jet = cm.get_cmap('jet')
+    heatmap_rgba = jet(heatmap_norm_full)
+    
+    # Set transparency: Alpha = 0 where value < 0.5 (filtering blue/green)
+    # Also apply global alpha of 0.5 for visible parts
+    heatmap_rgba[:, :, 3] = np.where(heatmap_norm_full > 0.5, 0.6, 0.0)
+    
+    plt.imshow(heatmap_rgba)
+    plt.axis('off')
+
+    # 4. Focused Region (Thresholded)
+    # Resize heatmap to match image size
+    heatmap_resized = cv2.resize(heatmap, (image.shape[1], image.shape[0]))
+    
+    # Thresholding to get the "red part" (high activation)
+    # Heatmap is already normalized 0-1 by tf-keras-vis usually, but let's ensure
+    heatmap_norm = (heatmap_resized - np.min(heatmap_resized)) / (np.max(heatmap_resized) - np.min(heatmap_resized) + 1e-8)
+    mask = heatmap_norm > 0.5
+    
+    # Apply mask to image
+    focused_image = display_image.copy()
+    focused_image[~mask] = 0 # Set non-active regions to black
+    
+    plt.subplot(1, 4, 4)
+    plt.title('Focused Region')
+    plt.imshow(focused_image)
     plt.axis('off')
     
     plt.tight_layout()

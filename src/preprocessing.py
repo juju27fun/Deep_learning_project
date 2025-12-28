@@ -104,10 +104,10 @@ def augment_image(image, label=None):
     image = tf.image.random_brightness(image, max_delta=0.2)
     
     # Random contrast
-    image = tf.image.random_contrast(image, lower=0.8, upper=1.2)
+    image = tf.image.random_contrast(image, lower=0.9, upper=1.1)
     
     # Random saturation
-    image = tf.image.random_saturation(image, lower=0.8, upper=1.2)
+    image = tf.image.random_saturation(image, lower=0.9, upper=1.1)
     
     # Random rotation (90 degrees)
     k = tf.random.uniform(shape=[], minval=0, maxval=4, dtype=tf.int32)
